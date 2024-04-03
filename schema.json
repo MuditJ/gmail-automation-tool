@@ -1,0 +1,35 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "rules": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "fieldName": {
+              "type": "string",
+              "enum": ["From", "To", "Date sent", "Date received"]
+            },
+            "predicate": {
+              "type": "string",
+              "enum": ["contains", "not equal to", "greater than", "less than", "equal to"]
+            },
+            "value": {
+              "oneOf": [
+                {"type": "string"},
+                {"type": "string", "format": "date"}
+              ]
+            }
+          },
+          "required": ["fieldName", "predicate", "value"]
+        }
+      },
+      "collectionPredicate": {
+        "type": "string",
+        "enum": ["All", "Any"]
+      }
+    },
+    "required": ["rules", "collectionPredicate"]
+  }
+  
