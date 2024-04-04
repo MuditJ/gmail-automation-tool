@@ -1,4 +1,5 @@
 {
     "collectionPredicate" : "Any",
-    "rules" : []
+    "rules" : [],
+    "actions" : ["Mark as read"]
 }

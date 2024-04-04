@@ -14,8 +14,10 @@ class RulesJsonValidator():
             return json.load(f)
         
     def validate_json(self, json_obj):
-        res = validate(json_obj, self.schema)
-        return res
+        try:
+            validate(json_obj, self.schema)
+        except Exception as e:
+                print('An exception occured: ',e)
 
 
 

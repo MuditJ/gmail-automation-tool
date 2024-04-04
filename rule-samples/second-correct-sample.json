@@ -1,0 +1,16 @@
+{
+    "rules": [
+      {
+        "fieldName": "From",
+        "predicate": "contains",
+        "value": "example@example.com"
+      },
+      {
+        "fieldName": "To",
+        "predicate": "contains",
+        "value": "mudit"
+      }
+    ],
+    "collectionPredicate": "All",
+    "actions": ["Mark as read", "Move message"]
+  }

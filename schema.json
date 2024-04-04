@@ -9,17 +9,14 @@
           "properties": {
             "fieldName": {
               "type": "string",
-              "enum": ["From", "To", "Date sent", "Date received"]
+              "enum": ["From", "To", "Date Sent", "Date Received"]
             },
             "predicate": {
               "type": "string",
               "enum": ["contains", "not equal to", "greater than", "less than", "equal to"]
             },
             "value": {
-              "oneOf": [
-                {"type": "string"},
-                {"type": "string", "format": "date"}
-              ]
+              "type": "string"
             }
           },
           "required": ["fieldName", "predicate", "value"]
@@ -28,8 +25,15 @@
       "collectionPredicate": {
         "type": "string",
         "enum": ["All", "Any"]
+      },
+      "actions": {
+        "type": "array",
+        "items": {
+            "type": "string",
+            "enum": ["Mark as read", "Mark as unread", "Move message"]
+        }
       }
     },
-    "required": ["rules", "collectionPredicate"]
+    "required": ["rules", "collectionPredicate", "actions"]
   }
   
