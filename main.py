@@ -1,7 +1,32 @@
 import json
 
 from validator import RulesJsonValidator
-from model import Rule,Rules, CollectionPredicate
+from model import Email,Rules, CollectionPredicate
+from typing import List
+from executor import RulesExecutor
+import os
+
+
+def parse_email_file(file_path: str) -> Email:
+    with open(file_path, 'r') as file:
+        lines = file.readlines()
+
+    email_data = {}
+    for line in lines:
+        key, value = line.strip().split(':', 1)
+        email_data[key] = value 
+    
+
+    return Email(**email_data)
+
+def convert_text_files_to_emails(directory: str) -> List[Email]:
+    emails = []
+    for filename in os.listdir(directory):
+        if filename.endswith('.txt'):
+            file_path = os.path.join(directory, filename)
+            email = parse_email_file(file_path)
+            emails.append(email)
+    return emails
 
 def main():
     validator = RulesJsonValidator()
@@ -23,8 +48,17 @@ def main():
             print(rules_instance.collectionPredicate == CollectionPredicate.All)
             print(rules_instance.collectionPredicate)
             print(rules_instance.rules)
-            #executor = RulesExecutor(rules_instance)
-        
+
+            #Convert all the emails in email samples into Pydantic model objects
+            emails = convert_text_files_to_emails('./email-samples')
+            print('*********')
+            for email in emails:
+                print(email)
+
+            #Create instance of executor to run the emails through
+            executor = RulesExecutor(rules_instance)
+            executor.execute_actions(emails)
+
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
-From: muditj06@gmail.com
-To: muditjha401@gmail.com 
-Subject: Sample email message for HappyFox
-Date received: <some date here>
-Content: Hi, this is a sample email message for testing my assignment. 
+fromField: muditj06@gmail.com
+toField: muditjha401@gmail.com 
+subjectField: Sample email message for HappyFox
+dateReceivedField: <some date here>
+contentField: Hi, this is a sample email message for testing my assignment. 

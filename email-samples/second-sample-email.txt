@@ -1,5 +1,5 @@
-From: muditjha401@gmail.com
-To: muditj06@gmail.com 
-Subject: Sample email reply for HappyFox
-Date received: <some date here>
-Content: Hi, I received your last email. 
+fromField: muditjha401@gmail.com
+toField: muditj06@gmail.com 
+subjectField: Sample email reply for HappyFox
+dateReceivedField: <some date here>
+contentField: Hi, I received your last email. 

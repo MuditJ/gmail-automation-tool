@@ -3,12 +3,12 @@
       {
         "fieldName": "From",
         "predicate": "contains",
-        "value": "example@example.com"
+        "value": "mudit"
       },
       {
         "fieldName": "To",
         "predicate": "contains",
-        "value": "mudit"
+        "value": "muditjha401"
       }
     ],
     "collectionPredicate": "All",

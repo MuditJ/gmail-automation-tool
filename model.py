@@ -1,9 +1,15 @@
-from dataclasses import dataclass 
 from typing import List
 from enum import Enum
-from pydantic import BaseModel, validator, EmailStr
+from pydantic import BaseModel, Field
 '''These represent the different json objects at various levels of nesting that the rules json represent'''
 
+
+class Email(BaseModel):
+    fromField: str 
+    toField: str
+    dateReceivedField: str
+    contentField: str
+    subjectField: str
 
 class CollectionPredicate(Enum):
     Any: str = "Any"
@@ -26,22 +32,11 @@ class Field(Enum):
     toField: str = "To"
     dateReceivedField: str = "Date Received"
 
-@dataclass
 class Rule(BaseModel):
     fieldName: Field
     predicate: Predicate
     value: str
 
-'''
-    @validator('fieldValue')
-    def validate_field_value(cls, v, values, **kwargs):
-        if values.get('fieldName') in [Field.fromField, Field.toField]:
-            # If fieldName is "From" or "To", validate fieldValue as an email
-            if not EmailStr.validate(v):
-                raise ValueError(f'Invalid email address for {values["fieldName"]} field')
-        return v
-'''
-@dataclass
 class Rules(BaseModel):
     collectionPredicate: CollectionPredicate
     rules: List[Rule]
