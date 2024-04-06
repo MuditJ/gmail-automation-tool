@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class Email(BaseModel):
+    idField: str
     fromField: str 
     toField: str
     dateReceivedField: str

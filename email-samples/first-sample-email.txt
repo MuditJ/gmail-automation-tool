@@ -1,5 +1,5 @@
-fromField: muditj06@gmail.com
-toField: muditjha401@gmail.com 
-subjectField: Sample email message for HappyFox
+fromField: johndoe06@gmail.com
+toField: johndoe401@gmail.com 
+subjectField: Sample email message for Comp
 dateReceivedField: <some date here>
 contentField: Hi, this is a sample email message for testing my assignment. 

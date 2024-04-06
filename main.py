@@ -4,6 +4,7 @@ from validator import RulesJsonValidator
 from model import Email,Rules, CollectionPredicate
 from typing import List
 from executor import RulesExecutor
+from database import load_emails_from_db
 import os
 
 
@@ -42,15 +43,9 @@ def main():
             print(json_obj)
             #Load the json into a model instance using pydantic
             rules_instance = Rules.model_validate(json_obj)
-            print(rules_instance)
-            print(type(rules_instance))
-            print(rules_instance.collectionPredicate == CollectionPredicate.Any)
-            print(rules_instance.collectionPredicate == CollectionPredicate.All)
-            print(rules_instance.collectionPredicate)
-            print(rules_instance.rules)
-
             #Convert all the emails in email samples into Pydantic model objects
-            emails = convert_text_files_to_emails('./email-samples')
+            emails = load_emails_from_db()
+            #emails = convert_text_files_to_emails('./email-samples')
             print('*********')
             for email in emails:
                 print(email)
