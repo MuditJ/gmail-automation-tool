@@ -8,9 +8,9 @@
       {
         "fieldName": "To",
         "predicate": "contains",
-        "value": "muditjha401"
+        "value": "muditj"
       }
     ],
     "collectionPredicate": "All",
-    "actions": ["Mark as read", "Move message"]
+    "actions": ["Mark as unread", "Move message"]
   }

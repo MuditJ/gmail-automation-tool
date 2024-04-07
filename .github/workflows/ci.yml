@@ -1,0 +1,33 @@
+name: Code Quality Check
+
+on:
+  push:
+    branches:
+      - main  # adjust this to your main branch name
+      - master  # if your default branch is 'master'
+
+jobs:
+  lint:
+    name: Flake8 and Black
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # adjust to the version you're using
+
+    - name: Install dependencies
+      run: pip install flake8 black
+
+    - name: Run Flake8
+      run: |
+        flake8 .
+
+    - name: Run Black
+      run: |
+        black --check .
+

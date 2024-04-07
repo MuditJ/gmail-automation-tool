@@ -1,6 +1,6 @@
 from typing import List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 '''These represent the different json objects at various levels of nesting that the rules json represent'''
 
 
