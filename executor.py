@@ -1,11 +1,20 @@
 
-from model import Rule, Rules, CollectionPredicate, Predicate, Email
+from model import Rule, Rules, CollectionPredicate, Predicate, Email, Action
 from typing import List
+from utils import *
 
 class RulesExecutor():
     '''An instance of this class takes a rules instance and applies it to a collection of emails'''
-    def __init__(self, rules_instance: Rules):
+
+    action_mapping: dict = {
+        Action.mark_as_read: mark_email_as_read,
+        Action.mark_as_unread: mark_email_as_unread,
+        Action.move_message: move_message
+    }
+
+    def __init__(self, rules_instance: Rules, client: GoogleAPIClient):
         self.rules_instance = rules_instance
+        self.client = client
         
 
     def _get_filtered_emails(self, emails: List[Email]):
@@ -19,6 +28,12 @@ class RulesExecutor():
         print('Filtered emails are:')
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         for email in filtered_emails:
+            #Update in database and set the FILTERED column as 1
+            for action in self.rules_instance.actions:
+                print(action, type(action), action.name)
+                action_func = self.action_mapping[action]
+                #Perform action
+                action_func(self.client, email)
             print(email)
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 

@@ -6,6 +6,7 @@ from typing import List
 from executor import RulesExecutor
 from database import load_emails_from_db
 import os
+from apiclient import GoogleAPIClient
 
 
 def parse_email_file(file_path: str) -> Email:
@@ -51,7 +52,9 @@ def main():
                 print(email)
 
             #Create instance of executor to run the emails through
-            executor = RulesExecutor(rules_instance)
+            client = GoogleAPIClient()
+            client.get_credentials()
+            executor = RulesExecutor(rules_instance, client)
             executor.execute_actions(emails)
 
 

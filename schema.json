@@ -9,7 +9,7 @@
           "properties": {
             "fieldName": {
               "type": "string",
-              "enum": ["From", "To", "Date Sent", "Date Received"]
+              "enum": ["From", "To", "Subject", "Content", "Date Received"]
             },
             "predicate": {
               "type": "string",

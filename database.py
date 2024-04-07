@@ -71,6 +71,7 @@ def prepare_db():
     remove_all_entries_from_table('Label')
     print('Removed all entries from Label table')
     insert_labels()
+    print('Re-added labels')
 
 
 def add_to_db(db_file: str, data: dict, table_name):
@@ -88,6 +89,13 @@ def add_to_db(db_file: str, data: dict, table_name):
     cursor.execute(query, tuple(data.values()))
 
     # Commit the transaction and close the connection
+    conn.commit()
+    conn.close()
+
+def update_email_as_filtered(email_id: str):
+    conn = sqlite3.connect('email_database.db')
+    cursor = conn.cursor()
+    cursor.execute('UPDATE Email SET Filtered = 1 WHERE Id = ?', (email_id,))
     conn.commit()
     conn.close()
 
