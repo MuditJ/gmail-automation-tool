@@ -32,6 +32,8 @@ class Field(Enum):
     fromField: str = "From"
     toField: str = "To"
     dateReceivedField: str = "Date Received"
+    subjectField: str = "Subject"
+    contentField: str = "Content"
 
 class Rule(BaseModel):
     fieldName: Field
