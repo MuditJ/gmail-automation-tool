@@ -1,8 +1,13 @@
 from abc import ABC, abstractmethod
 from model import Email, Rule, Field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import re
+
 class PredicateStrategy(ABC):
+    '''This is the abstract base class which is used to inherit from for other strategy classes
+    which make use of a date based predicate in the rules'''
+    format_str = "%a, %d %b %Y %H:%M:%S %z"
+
     @abstractmethod
     def apply_rule(self, email: Email, rule: Rule):
         pass
@@ -56,35 +61,32 @@ class PredicateStrategy(ABC):
             return datetime.now() - delta
         else:
             raise ValueError("Invalid time string format")
-
-# Example usage
-'''
-time_strings = ["2 days old", "3 hours old", "1 months old", "2 years old"]
-for time_string in time_strings:
-    parsed_time = parse_time_string(time_string)
-    print(f"{time_string}: {parsed_time}")
-'''
         
-            
+    def get_datetime_from_email(self, email:Email):
+        return datetime.strptime(email.dateReceivedField, self.format_str)
+        
 
-
-    
-class ContainsPredicateStrategy(PredicateStrategy):
-    def apply_rule(self, email: Email, rule: Rule) -> bool:
-        email_field_value = self.get_email_field_value(email, rule)
-        return rule.value in email_field_value
 
 class LessThanPredicateStrategy(PredicateStrategy):
-    def apply_rule(self, email: Email, rule: Rule):
-        email_field_value = self.get_email_field_value(email, rule)
-        pass
+    def apply_rule(self, email: Email, rule: Rule) -> bool:
+        email_datetime = self.get_datetime_from_email(email).replace(tzinfo=timezone.utc)
+        rule_datetime = self.parse_time_string(rule).replace(tzinfo=timezone.utc)
+        print('Email datetime:',email_datetime.strftime("%A, %d %B %Y %H:%M:%S"))
+        print('Rule datetime:', rule_datetime.strftime("%A, %d %B %Y %H:%M:%S"))
+        print('Checking if email datetime is greater than rule datetime')
+        res = email_datetime > rule_datetime
+        print('Result: ', res)
+        return res
+
 
 
 class GreaterThanPredicateStrategy(PredicateStrategy):
     def apply_rule(self, email: Email, rule: Rule):
-        pass 
-
-class EqualToPredicateStrategy(PredicateStrategy):
-    def apply_rule(self, email: Email, rule: Rule):
-        email_field_value = self.get_email_field_value(email, rule)
-        pass
+        email_datetime = self.get_datetime_from_email(email).replace(tzinfo=timezone.utc)
+        rule_datetime = self.parse_time_string(rule).replace(tzinfo=timezone.utc)
+        print('Email datetime: ', email_datetime.strftime("%A, %d %B %Y %H:%M:%S"))
+        print('Rule datetime: ', rule_datetime.strftime("%A, %d %B %Y %H:%M:%S"))
+        print('Checking if email datetime is less than rule datetime')
+        res = email_datetime < rule_datetime
+        print('Result: ', res)
+        return res

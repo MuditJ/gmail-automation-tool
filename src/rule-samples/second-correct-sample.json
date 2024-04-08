@@ -6,9 +6,14 @@
         "value": "mudit"
       },
       {
-        "fieldName": "To",
+        "fieldName": "Subject",
         "predicate": "contains",
-        "value": "muditj"
+        "value": "assignment"
+      },
+      {
+        "fieldName": "Date Received",
+        "predicate": "less than",
+        "value": "4 days old"
       }
     ],
     "collectionPredicate": "All",

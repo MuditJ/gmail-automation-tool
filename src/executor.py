@@ -3,6 +3,7 @@ from model import Rule, Rules, CollectionPredicate, Predicate, Email, Action
 from typing import List
 from utils import *
 from database import update_email_as_filtered
+from strategy import GreaterThanPredicateStrategy, LessThanPredicateStrategy
 
 class RulesExecutor():
     '''An instance of this class takes a rules instance and applies it to a collection of emails'''
@@ -31,12 +32,13 @@ class RulesExecutor():
         for email in filtered_emails:
             #Update in database and set the FILTERED column as 1
             update_email_as_filtered(email.idField)
+            print(email)
             for action in self.rules_instance.actions:
-                print(action, type(action), action.name)
+                print('Applying action..')
+                print(action.name)
                 action_func = self.action_mapping[action]
                 #Perform action
                 action_func(self.client, email)
-            print(email)
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
     def _check_email(self,email: Email) -> bool:
@@ -49,7 +51,6 @@ class RulesExecutor():
     def _check_rule_for_email(self,rule: Rule, email: Email) -> bool:
         '''Check if rule applies for email'''
         email_field_value = RulesExecutor.get_email_field_value(rule.fieldName.value, email)
-        print(rule.value, email_field_value)
         if rule.predicate == Predicate.contains:
             contains_func = lambda x,y: x in y 
             return contains_func(rule.value, email_field_value)
@@ -59,6 +60,16 @@ class RulesExecutor():
         elif rule.predicate == Predicate.equal_to:
             equal_to_func = lambda x,y: x == y
             return equal_to_func(rule.value, email_field_value)
+        elif rule.predicate == Predicate.greater_than:
+            strategy = GreaterThanPredicateStrategy()
+            return strategy.apply_rule(email, rule)
+        elif rule.predicate == Predicate.less_than:
+            strategy = LessThanPredicateStrategy()
+            return strategy.apply_rule(email, rule)
+        else:
+            return False 
+
+
 
     @staticmethod
     def get_email_field_value(fieldName: str, email:Email) -> str:
