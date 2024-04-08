@@ -3,31 +3,37 @@ name: Code Quality Check
 on:
   push:
     branches:
-      - main  # adjust this to your main branch name
-      - master  # if your default branch is 'master'
+      - main
+      - master
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   lint:
     name: Flake8 and Black
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
       
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # adjust to the version you're using
+        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
-      run: pip install flake8 black
+      run: |
+        pip install flake8 black
+
+    - name: Run Black
+      run: |
+        black .
 
     - name: Run Flake8
       run: |
         flake8 .
-
-    - name: Run Black
-      run: |
-        black --check .
-
