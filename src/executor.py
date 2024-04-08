@@ -2,6 +2,7 @@
 from model import Rule, Rules, CollectionPredicate, Predicate, Email, Action
 from typing import List
 from utils import *
+from database import update_email_as_filtered
 
 class RulesExecutor():
     '''An instance of this class takes a rules instance and applies it to a collection of emails'''
@@ -12,7 +13,7 @@ class RulesExecutor():
         Action.move_message: move_message
     }
 
-    def __init__(self, rules_instance: Rules, client: GoogleAPIClient):
+    def __init__(self, rules_instance: Rules, client):
         self.rules_instance = rules_instance
         self.client = client
         
@@ -29,6 +30,7 @@ class RulesExecutor():
         print('++++++++++++++++++++++++++++++++++++++++++++++++++++++')
         for email in filtered_emails:
             #Update in database and set the FILTERED column as 1
+            update_email_as_filtered(email.idField)
             for action in self.rules_instance.actions:
                 print(action, type(action), action.name)
                 action_func = self.action_mapping[action]
@@ -66,3 +68,7 @@ class RulesExecutor():
             return email.toField
         elif fieldName == "Date Received":
             return email.dateReceivedField
+        elif fieldName == "Subject":
+            return email.subjectField
+        elif fieldName == "Content":
+            return email.contentField

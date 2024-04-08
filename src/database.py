@@ -23,16 +23,6 @@ def create_database():
             Label TEXT
         )''')
     
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS Email_Labels (
-        Id INTEGER PRIMARY KEY,
-        EmailId INTEGER,
-        LabelId INTEGER,
-        FOREIGN KEY (EmailId) REFERENCES Email (ID),
-        FOREIGN KEY (LabelId) REFERENCES Label (Id)
-    )''')
-
-
     conn.commit()
     conn.close()
 
@@ -69,6 +59,7 @@ def prepare_db():
     create_database()
     print("Database tables created successfully.")
     remove_all_entries_from_table('Label')
+    remove_all_entries_from_table('Email')
     print('Removed all entries from Label table')
     insert_labels()
     print('Re-added labels')
@@ -88,7 +79,6 @@ def add_to_db(db_file: str, data: dict, table_name):
     # Execute the query with the dictionary values as parameters
     cursor.execute(query, tuple(data.values()))
 
-    # Commit the transaction and close the connection
     conn.commit()
     conn.close()
 
@@ -114,17 +104,15 @@ def load_emails_from_db() -> List[Email]:
             idField=row[0],
             fromField = row[1],
             toField=row[2],
-            dateReceivedField=row[3],
-            contentField=row[4],
-            subjectField=row[5]
+            contentField=row[3],
+            subjectField=row[4],
+            dateReceivedField=row[5],
         )
         email_instances.append(email_instance)
 
-    # Close the database connection
     conn.close()
     return email_instances
 
 
 if __name__ == "__main__":
-    #prepare_db()
     prepare_db()

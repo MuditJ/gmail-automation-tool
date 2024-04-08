@@ -1,5 +1,4 @@
 import os.path
-
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -7,6 +6,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from typing import List
 from database import add_to_db, prepare_db
+from utils import prepare_data_and_add_to_db
 
 
 class GoogleAPIClient():
@@ -56,7 +56,7 @@ class GoogleAPIClient():
           email_messages.append(mail_content)
       return email_messages
 
-  def modify_email_labels(self, emailId, labelsToAdd: List[str] = None, labelsToRemove: List[str] = None):
+  def modify_email_labels(self, emailId, labelsToAdd: List[str] = [], labelsToRemove: List[str] = []):
     '''Modify labels (add and/or remove) for an email'''
     self.service.users().messages().modify(userId='me', id = emailId, body = {'addLabelIds' : labelsToAdd, 'removeLabelIds' : labelsToRemove}).execute()
 
@@ -66,19 +66,7 @@ class GoogleAPIClient():
     results = self.service.users().labels().list(userId="me").execute()
     labels = results.get("labels", [])
     return [label['name'] for label in labels]
-
-
-  def prepare_data_and_add_to_db(self,mail_content: dict):
-    data = {}
-    data['Id'] = mail_content['id']
-    data['Content'] = mail_content['snippet']
-    data['Date'] = mail_content['payload']['headers'][1]['value']
-    data['Subject'] = mail_content['payload']['headers'][3]['value']
-    data['From'] = mail_content['payload']['headers'][4]['value']
-    data['To'] = mail_content['payload']['headers'][5]['value']
-    #Add entry to db
-    print('Adding entry to db')
-    add_to_db('email_database.db', data, 'Email')
+  
 
 if __name__ == "__main__":
   #prepare_db()
@@ -92,7 +80,7 @@ if __name__ == "__main__":
   for email in emails:
     print(email)
     print('****')
-    client.prepare_data_and_add_to_db(email)
+    prepare_data_and_add_to_db(email)
   #Add these emails to DB
   #Move all these fetched emails:
   #email_ids = [email['id'] for email in emails]
