@@ -51,3 +51,13 @@ Optionally, you can also install DB Browser for Sqlite to view the stored data (
        
         . Apply the rules against the emails, filter out the ones which are valid, and perform the mentioned actions
 
+
+
+#### TLDR:
+	- Run `python3 apiclient.py` to fetch the access and refresh tokens needed for making calls to Gmail API, and fetches emails
+	- Run `python3 main.py` to run the main script - which applies the defined json rules against the fetched emails and performs the defined action
+
+#### TODO:
+	- Add logging and package level exceptions and exception handling 
+	- Use click/argparse to provide better usability for passing arguments like rules.json
+	- Add some unit tests 
