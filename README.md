@@ -10,7 +10,7 @@ It uses OAuth to authenticate with the Gmail API.
 ```
 python3 -m venv env
 source venv/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 * On windows, the command to activate the created virtual environment is:
 
